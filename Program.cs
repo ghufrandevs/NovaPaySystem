@@ -310,7 +310,14 @@ namespace NovaPaySystem
                 totalTransactionsProcessed++;
             }
         }
+        protected void AddTransaction(string type, double amount)
+        {
+            Transaction transaction = new(type, amount);
 
+            transactions.Add(transaction);
+
+            totalTransactionsProcessed++;
+        }
         public void Deposit(double amount, string note)
         {
             if (amount > 0)
@@ -352,19 +359,13 @@ namespace NovaPaySystem
 
         }
         public override void Withdraw(double amount)
-        {
-            //Checks: amount > 0 AND (balance - amount) >= MinBalance.
-            //If valid: subtracts from balance, creates a Transaction("Withdrawal", amount),
-            //adds to transactions list, increments totalTransactionsProcessed.
-            //Otherwise prints the specific error.
+        {       
 
             if(amount>0 && ((Balance-amount)>=MinBalance))
                 { 
                 balance-= amount;
-                Transaction transaction = new("Withdrawal", amount);
-                transactions.Add(transaction);
-                totalTransactionsProcessed++;
-                
+                AddTransaction("Withdrawal", amount);
+
             }
             else
             {
@@ -405,14 +406,11 @@ namespace NovaPaySystem
         }
         public override void Withdraw(double amount)
         {
-            //Checks: amount > 0 AND (balance - amount) >= -overdraftLimit. If valid: subtracts from balance,
-            //logs Transaction, increments counter. Otherwise prints "Withdrawal exceeds overdraft limit."
+           
             if(amount> 0 && ((balance-amount)>=-overdraftLimit))
             {
                 balance -= amount;
-                Transaction transaction = new("Withdrawal", amount);
-                transactions.Add(transaction);
-                totalTransactionsProcessed++;
+                AddTransaction("Withdrawal", amount);
             }
             else
             {
