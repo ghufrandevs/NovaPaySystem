@@ -485,14 +485,13 @@ namespace NovaPaySystem
         {
             if (note != "")
             {
-                Console.WriteLine($"{date.ToShortDateString()} {type} +{amount:F2} {note}");
+                Console.WriteLine($"{date.ToShortDateString()} {type} {(type == "Withdrawal" ? "-" : "+")}{amount:F2} {note}");
             }
+
             else
             {
-                Console.WriteLine($"{date.ToShortDateString()} {type} +{amount:F2} ");
-
+                Console.WriteLine($"{date.ToShortDateString()} {type} {(type == "Withdrawal" ? "-" : "+")}{amount:F2}");
             }
-
         }
 
     }
