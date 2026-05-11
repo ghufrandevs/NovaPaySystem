@@ -99,6 +99,7 @@ namespace NovaPaySystem
                 }
 
                 bank.ProcessDeposit(account, amount);
+                Console.WriteLine("Deposit completed successfully.");
             }
             else
             {
@@ -334,12 +335,17 @@ namespace NovaPaySystem
 
         public virtual void PrintStatement()
         {
-            Console.WriteLine($"Owner Name : {OwnerName}");
-            Console.WriteLine($"AccountNumber : {AccountNumber}");
-            Console.WriteLine($"AccountType : {AccountType}");   
-            Console.WriteLine($"Balance : {Balance}");
-            foreach( Transaction transaction in transactions )
+            Console.WriteLine("========== Account Statement ==========\n");
+
+            Console.WriteLine($"Account Number : {AccountNumber}");
+            Console.WriteLine($"Owner Name    : {OwnerName}");
+            Console.WriteLine($"Account Type  : {AccountType}");
+            Console.WriteLine($"Balance       : {Balance:F2}");
+
+            Console.WriteLine("\n------------- Transactions -------------\n");
+            foreach ( Transaction transaction in transactions )
             {
+                Console.WriteLine("\n========================================");
                 transaction.DisplayInfo();
             }
 
@@ -433,9 +439,7 @@ namespace NovaPaySystem
         public FixedDepositAccount(string ownerName, double depositAmount) :base(ownerName)
         {
             AccountType = "Fixed Deposit";
-            //Calls base(ownerName). Sets AccountType = "Fixed Deposit". Validates depositAmount > 0.
-            //Stores it in lockedAmount, then calls the overloaded Deposit(depositAmount, "Initial Fixed Deposit")
-            //to set the balance and log the transaction.
+            
             if(depositAmount>0)
             {
                 this.lockedAmount= depositAmount;
@@ -607,13 +611,13 @@ namespace NovaPaySystem
 
             Console.WriteLine($"Total Accounts: {accounts.Count}");
 
-            Console.WriteLine($"Savings Accounts: {CountSavingsAccounts}");
+            Console.WriteLine($"Savings Accounts: {CountSavingsAccounts()}");
 
-            Console.WriteLine($"Current Accounts: {CountCurrentAccounts}");
+            Console.WriteLine($"Current Accounts: {CountCurrentAccounts()}");
 
-            Console.WriteLine($"Fixed Deposit Accounts: {CountFixedDepositAccounts}");
+            Console.WriteLine($"Fixed Deposit Accounts: {CountFixedDepositAccounts()}");
 
-            Console.WriteLine($"Total Balance: {CalculateTotalBalance}");
+            Console.WriteLine($"Total Balance: {CalculateTotalBalance()}");
 
             Console.WriteLine($"Total Transactions: {BankAccount.GetTotalTransactions()}");
         }
