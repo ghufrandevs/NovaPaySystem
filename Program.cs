@@ -181,10 +181,7 @@ namespace NovaPaySystem
                 Console.WriteLine("Account not found.");
             }
         }
-        public static void BankSummary(Bank bank)
-        {
-            bank.DisplaySummary();
-        }
+        
         public static bool ExitSystem()
         {
             Console.WriteLine("Are you sure you want to exit the system? (yes/no)");
@@ -248,7 +245,7 @@ namespace NovaPaySystem
                         break; 
 
                     case 8:
-                        BankSummary(bank);
+                        bank.DisplaySummary();
                         break;
                     
                     case 0:
