@@ -1,10 +1,8 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System.Transactions;
-
+﻿
 namespace NovaPaySystem
 {
     
-    internal class Program
+    internal class Program 
     {
         static public void ShowMenu()
         {
@@ -277,6 +275,7 @@ namespace NovaPaySystem
                 balance += amount;
                 Transaction transaction = new ("Deposit",amount);
                 transactions.Add(transaction);
+                totalTransactionsProcessed++;
             }
         }
 
@@ -518,45 +517,73 @@ namespace NovaPaySystem
                 Console.WriteLine("Account not found.");
             }
         }
-        public void DisplaySummary()
+        private int CountSavingsAccounts()
         {
-            int savingsCount = 0;
-            int currentCount = 0;
-            int fixedCount = 0;
-
-            double totalBalance = 0;
+            int count = 0;
 
             foreach (BankAccount account in accounts)
             {
-                totalBalance += account.Balance;
-
                 if (account is SavingsAccount)
                 {
-                    savingsCount++;
-                }
-
-                else if (account is CurrentAccount)
-                {
-                    currentCount++;
-                }
-
-                else if (account is FixedDepositAccount)
-                {
-                    fixedCount++;
+                    count++;
                 }
             }
+
+            return count;
+        }
+        private int CountCurrentAccounts()
+        {
+            int count = 0;
+
+            foreach (BankAccount account in accounts)
+            {
+                if (account is CurrentAccount)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+        private int CountFixedDepositAccounts()
+        {
+            int count = 0;
+
+            foreach (BankAccount account in accounts)
+            {
+                if (account is FixedDepositAccount)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+        private double CalculateTotalBalance()
+        {
+            double total = 0;
+
+            foreach (BankAccount account in accounts)
+            {
+                total += account.Balance;
+            }
+
+            return total;
+        }
+        public void DisplaySummary()
+        {
 
             Console.WriteLine($"Bank Name: {BankName}");
 
             Console.WriteLine($"Total Accounts: {accounts.Count}");
 
-            Console.WriteLine($"Savings Accounts: {savingsCount}");
+            Console.WriteLine($"Savings Accounts: {CountSavingsAccounts}");
 
-            Console.WriteLine($"Current Accounts: {currentCount}");
+            Console.WriteLine($"Current Accounts: {CountCurrentAccounts}");
 
-            Console.WriteLine($"Fixed Deposit Accounts: {fixedCount}");
+            Console.WriteLine($"Fixed Deposit Accounts: {CountFixedDepositAccounts}");
 
-            Console.WriteLine($"Total Balance: {totalBalance}");
+            Console.WriteLine($"Total Balance: {CalculateTotalBalance}");
 
             Console.WriteLine($"Total Transactions: {BankAccount.GetTotalTransactions()}");
         }
