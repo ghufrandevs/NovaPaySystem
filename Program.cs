@@ -21,6 +21,158 @@ namespace NovaPaySystem
             Console.WriteLine("0. Exit");
             Console.WriteLine("choice option :");
         }
+        static public void OpenSavingAccount(Bank bank)
+        {
+            Console.WriteLine("Enter Owner Name: ");
+            string name = (Console.ReadLine() ?? string.Empty).Trim();
+            while (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Name cannot be empty. Please re-enter:");
+                name = (Console.ReadLine() ?? string.Empty).Trim();
+            }
+            SavingsAccount savingsAccount = new SavingsAccount(name);
+            bank.OpenAccount(savingsAccount);
+        }
+        static public void OpenCurrentAccount(Bank bank)
+        {
+            Console.WriteLine("Enter Owner Name: ");
+            string name = (Console.ReadLine() ?? string.Empty).Trim();
+            while (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Name cannot be empty. Please re-enter:");
+                name = (Console.ReadLine() ?? string.Empty).Trim();
+            }
+            Console.WriteLine("Enter Overdraft Limit: ");
+
+            double overdraftLimit = Convert.ToDouble(Console.ReadLine());
+
+            CurrentAccount currentAccount = new CurrentAccount(name, overdraftLimit);
+
+            bank.OpenAccount(currentAccount);
+        }
+        public static void OpenFixedDepositAccount(Bank bank)
+        {
+            Console.WriteLine("Enter Owner Name: ");
+
+            string name = (Console.ReadLine() ?? string.Empty).Trim();
+
+            while (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Name cannot be empty. Please re-enter:");
+
+                name = (Console.ReadLine() ?? string.Empty).Trim();
+            }
+
+            Console.WriteLine("Enter Deposit Amount: ");
+
+            double depositAmount = Convert.ToDouble(Console.ReadLine());
+
+            FixedDepositAccount fixedAccount = new FixedDepositAccount(name, depositAmount);
+
+            bank.OpenAccount(fixedAccount);
+        }
+        public static void Deposit(Bank bank)
+        {
+            Console.WriteLine("Enter Account Number: ");
+
+            int accountNumber = Convert.ToInt32(Console.ReadLine());
+
+            BankAccount account = bank.FindAccount(accountNumber);
+            if(account !=null)
+            {
+                Console.WriteLine("Enter Deposit Amount: ");
+
+                double amount = Convert.ToDouble(Console.ReadLine());
+
+                bank.ProcessDeposit(account, amount);
+            }
+            else
+            {
+                Console.WriteLine("Account not found.");
+            }
+
+            
+        }
+        public static void Withdraw(Bank bank)
+        {
+            Console.WriteLine("Enter Account Number: ");
+
+            int accountNumber = Convert.ToInt32(Console.ReadLine());
+
+            BankAccount account = bank.FindAccount(accountNumber);
+
+            if (account != null)
+            {
+                Console.WriteLine("Enter Withdrawal Amount: ");
+
+                double amount = Convert.ToDouble(Console.ReadLine());
+
+                bank.ProcessWithdrawal(account, amount);
+            }
+
+            else
+            {
+                Console.WriteLine("Account not found");
+
+                }
+        }
+        public static void PrintAccountStatement(Bank bank)
+        {
+            Console.WriteLine("Enter Account Number: ");
+
+            int accountNumber = Convert.ToInt32(Console.ReadLine());
+
+            bank.PrintAccountStatement(accountNumber);
+        }
+        public static void ApplyInterest(Bank bank)
+        {
+            Console.WriteLine("Enter Savings Account Number: ");
+
+            int accountNumber = Convert.ToInt32(Console.ReadLine());
+
+            BankAccount account = bank.FindAccount(accountNumber);
+
+            if (account != null)
+            {
+                if (account is SavingsAccount savings)
+                {
+                    savings.ApplyInterest();
+
+                    Console.WriteLine("Interest applied successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("This is not a Savings Account.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Account not found.");
+            }
+        }
+        public static void BankSummary(Bank bank)
+        {
+            bank.DisplaySummary();
+        }
+        public static bool ExitSystem()
+        {
+            Console.WriteLine("Are you sure you want to exit the system? (yes/no)");
+            string inputs = (Console.ReadLine() ?? string.Empty).ToLower();
+            if (inputs == "no")
+            {
+                return false;
+            }
+            else if (inputs == "yes")
+            {
+                Console.WriteLine("Thank you for using the system --Exit--");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid option");
+                return false;
+            }
+        }
         static void Main(string[] args)
         {
             Bank bank=new Bank("NovaPay");
@@ -36,24 +188,46 @@ namespace NovaPaySystem
 
                 switch (option)
                 {
-                    case 1:
+                    case 1://Open Savings Account
+                        OpenSavingAccount(bank);
                         break;
-                        case 2:
+
+                        case 2://Open Current Account
+                        OpenCurrentAccount(bank);
                         break;
-                        case 3:
+
+                        case 3://Open Fixed Deposit Account
+                        OpenFixedDepositAccount(bank);
                         break;
-                        case 4:
+
+                        case 4://Deposit
+                        Deposit(bank);
                         break;
-                    case 5:
+
+                        case 5:
+                        Withdraw(bank);
                         break;
-                        case 6:
+
+                        case 6://Print Account Statement
+                        PrintAccountStatement(bank);
                         break;
+
                         case 7:
+                        ApplyInterest(bank);
                         break; 
+
                     case 8:
+                        BankSummary(bank);
                         break;
+                    
                     case 0:
+                        exit = ExitSystem();
                         break;
+                }
+                if (!exit)
+                {
+                    Console.ReadLine();
+                    Console.Clear();
                 }
             }
 
