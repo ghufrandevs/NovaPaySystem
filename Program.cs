@@ -40,9 +40,13 @@ namespace NovaPaySystem
                 Console.WriteLine("Name cannot be empty. Please re-enter:");
                 name = (Console.ReadLine() ?? string.Empty).Trim();
             }
-            Console.WriteLine("Enter Overdraft Limit: ");
 
-            double overdraftLimit = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Enter Overdraft Limit: ");
+            double overdraftLimit;
+            while (!double.TryParse(Console.ReadLine(), out overdraftLimit))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number:");
+            }
 
             CurrentAccount currentAccount = new CurrentAccount(name, overdraftLimit);
 
@@ -63,7 +67,11 @@ namespace NovaPaySystem
 
             Console.WriteLine("Enter Deposit Amount: ");
 
-            double depositAmount = Convert.ToDouble(Console.ReadLine());
+            double depositAmount;
+            while (!double.TryParse(Console.ReadLine(), out depositAmount))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number:");
+            }
 
             FixedDepositAccount fixedAccount = new FixedDepositAccount(name, depositAmount);
 
@@ -73,14 +81,22 @@ namespace NovaPaySystem
         {
             Console.WriteLine("Enter Account Number: ");
 
-            int accountNumber = Convert.ToInt32(Console.ReadLine());
+            int accountNumber;
+            while (!int.TryParse(Console.ReadLine(), out accountNumber))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number:");
+            }
 
             BankAccount account = bank.FindAccount(accountNumber);
             if(account !=null)
             {
                 Console.WriteLine("Enter Deposit Amount: ");
 
-                double amount = Convert.ToDouble(Console.ReadLine());
+                double amount;
+                while (!double.TryParse(Console.ReadLine(), out amount))
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid number:");
+                }
 
                 bank.ProcessDeposit(account, amount);
             }
@@ -95,7 +111,11 @@ namespace NovaPaySystem
         {
             Console.WriteLine("Enter Account Number: ");
 
-            int accountNumber = Convert.ToInt32(Console.ReadLine());
+            int accountNumber;
+            while (!int.TryParse(Console.ReadLine(), out accountNumber))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number:");
+            }
 
             BankAccount account = bank.FindAccount(accountNumber);
 
@@ -103,7 +123,11 @@ namespace NovaPaySystem
             {
                 Console.WriteLine("Enter Withdrawal Amount: ");
 
-                double amount = Convert.ToDouble(Console.ReadLine());
+                double amount;
+                while (!double.TryParse(Console.ReadLine(), out amount))
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid number:");
+                }
 
                 bank.ProcessWithdrawal(account, amount);
             }
@@ -118,7 +142,11 @@ namespace NovaPaySystem
         {
             Console.WriteLine("Enter Account Number: ");
 
-            int accountNumber = Convert.ToInt32(Console.ReadLine());
+            int accountNumber;
+            while (!int.TryParse(Console.ReadLine(), out accountNumber))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number:");
+            }
 
             bank.PrintAccountStatement(accountNumber);
         }
@@ -126,7 +154,11 @@ namespace NovaPaySystem
         {
             Console.WriteLine("Enter Savings Account Number: ");
 
-            int accountNumber = Convert.ToInt32(Console.ReadLine());
+            int accountNumber;
+            while (!int.TryParse(Console.ReadLine(), out accountNumber))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number:");
+            }
 
             BankAccount account = bank.FindAccount(accountNumber);
 
